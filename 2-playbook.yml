@@ -1,0 +1,12 @@
+
+- hosts: dev
+  user: root
+  become: yes
+  connection: ssh
+  gather_facts: yes
+
+  tasks:
+    -  name: install tree tool on node
+       yum:
+        name: tree
+        state: latest

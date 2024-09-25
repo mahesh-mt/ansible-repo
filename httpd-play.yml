@@ -1,0 +1,25 @@
+- hosts: dev
+  user: root
+  become: yes
+  connection: ssh
+  gather_facts: yes
+
+  tasks:
+    - name: install latest version of httpd
+      yum:
+        name: httpd
+        state: latest
+
+    - name: start httpd
+      systemd:
+        name: httpd
+        state: started
+
+    - name: create a file in root's home directory
+      shell: echo "httpd server" > index.html
+
+    - name: copy file
+      copy:
+        src: /root/index.html
+        dest: /var/www/html
+        remote_src: yes
