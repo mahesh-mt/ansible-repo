@@ -1,0 +1,31 @@
+- hosts: preprod[1]
+  user: root
+  connection: ssh
+  become: yes
+  gather_facts: yes
+
+  vars:
+    package_name: httpd
+    src_path: /root/index.html
+    dest_path: /var/www/html/
+
+  tasks:
+    - name: install the latest version of httpd
+      yum:
+        name: "{{ package_name }}"
+        state: latest
+      notify: httpd service is running
+    - name: create file in root of slave
+      shell: echo "httpd server" > /root/index.html
+
+    - name:
+      copy:
+        src: "{{ src_path }}"
+        dest: "{{ dest_path }}"
+        remote_src: yes
+  handlers:
+   - name: httpd service is running
+     systemd:
+      name: "{{ package_name }}"
+      state: started
+      enabled: yes
