@@ -18,12 +18,14 @@
     - name: remove httpd server
       yum:
         name: "{{ package_name }}"
-        state: removed
+        state: absent
+        autoremove: yes
+
     - name: delete index file
       shell: rm -rf /root/index.html
 
     - name: delete html dir
-      shell: rm -rf /var/www/html 
+      shell: rm -rf /var/www/html
         
 
   
